@@ -7,6 +7,7 @@ from skimage.viewer import ImageViewer
 import cv2
 import base64
 import ctypes
+import time
 
 # in NumPy indexing, the first dimension (camera.shape[0]) corresponds to rows, while the second (camera.shape[1])
 #  corresponds to columns, with the origin (camera[0, 0]) on the top-left corner. 
@@ -64,15 +65,17 @@ def KeepHighlights(img):
                 print "count after the initial row loop is: ", pixelCount
         
         # so far, so good
+        print 'time after initial row loop ', time.time()
 
         if pixelCount == 0: # In other words, no pixels were found in this whole row 
                             #- take the average middle row for each line of text
             for i in xrange(0, nCols, 1):
                 img[i, row] = 255
-                print "A certain pixel has been made white in the second for loop"               
+                              
         else:
             start = row
-        
+        print 'time after start = row loop', time.time()
+
         #if highlighted pixels are found, continue until a row where none are found
 
         while pixelCount > 0:
@@ -98,6 +101,7 @@ def KeepHighlights(img):
                             img[i, j] = 255
 
             row += 10
+            print 'time after the row increment ', time.time()
 
         #remove all the highlighting everywhere, leave only text
     for row in xrange(1, nRows, 1):
@@ -107,7 +111,8 @@ def KeepHighlights(img):
                 img[i, row] = 255 # set that particular pixel to white
                 # notice how you are smartly not touching the other pixels
                 # like in the writing and whatnot    
-           
+    print 'time after highlighting has been removed ', time.time()
+    
     viewer2 = ImageViewer(img)
     print("Viewer.show() has been implemented, over!")
     viewer2.show()
